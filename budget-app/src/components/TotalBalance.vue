@@ -1,5 +1,6 @@
 <template>
-    <div class="total-value">Balance: {{ total }} </div>
+    <!-- <div class="total-value" :style="{color: totalColor}">Total Balance: {{ total }} </div> -->
+    <div class="total-value">Total Balance: <span :class="totalColor"><b>{{ total }}</b></span> </div>
 </template>
 
 <script>
@@ -9,9 +10,15 @@ export default {
         total: {
             type: Number,
             default: 0
+        },
+        totalColor: {
+            type: String,
+            default: ''
         }
-    }
+    },
+
 }
+
 </script>
 
 <style scoped>

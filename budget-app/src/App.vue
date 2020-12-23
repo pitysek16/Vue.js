@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <Form @submitForm="onFormSubmit"/>
-    <TotalBalace :total="totalBalance"/>
-    <BudgetList :list="list" @deleteItem="onDeleteItem"/>
+    <TotalBalace :total="totalBalance" :totalColor="totalColor"/>
+    <BudgetList :list="list"/>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
 import BudgetList from '@/components/BudgetList';
 import TotalBalace from '@/components/TotalBalance';
 import Form from '@/components/Form';
+
 export default {
   name: 'App',
   components: {
@@ -20,25 +21,34 @@ export default {
       1: {
           type: 'INCOME',
           value: 150,
-          comment: 'some text',
+          comment: 'some plus',
           id: 1
         },
       2:  {
           type: 'OUTCOME',
-          value: -50,
-          comment: 'some value',
+          value: 50,
+          comment: 'some minus',
           id: 2
         },
       }
     }),
   computed: {
     totalBalance() {
-      return Object.values(this.list).reduce((acc, item) => acc + item.value, 0);
-    }
+      return Object.values(this.list).reduce((acc, item) => acc + this.typeOfComment(item.type)*item.value, 0);
+    },
+    totalColor() {
+        if(this.totalBalance > 0){
+          return "green";
+        } else if(this.totalBalance < 0){
+          return "red";
+        } else {
+          return "#000"
+        }
+    },
   },
   methods: {
-    onDeleteItem(id) {
-      this.$delete(this.list, id)
+    typeOfComment(type){
+      return type === 'INCOME' ? 1 : -1;
     },
     onFormSubmit(data) {
       const newObj = {
@@ -59,5 +69,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.green {
+    color: green
+}
+.red {
+    color: red
 }
 </style>
