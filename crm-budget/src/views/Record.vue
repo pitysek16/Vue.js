@@ -3,8 +3,8 @@
     <div class="page-title">
       <h3>Новая запись</h3>
     </div>
-
-    <div class="center" v-if="!categories.length">
+    <Loader v-if="loading" />
+    <div class="center" v-else-if="!categories.length">
       Категорий пока нет.
       <router-link to="/categories">Добавить новую категорию</router-link>
     </div>
@@ -104,6 +104,7 @@ export default {
       type: 'outcome',
       amount: 1,
       description: '',
+      loading: true,
     };
   },
   validations: {
@@ -120,6 +121,8 @@ export default {
       this.select = M.FormSelect.init(this.$refs.select);
       M.updateTextFields();
     }, 0);
+
+    this.loading = false;
   },
   computed: {
     ...mapGetters(['info']),

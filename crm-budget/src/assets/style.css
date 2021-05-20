@@ -135,8 +135,8 @@
   max-width: 500px;
 }
 .breadcrumb-wrap,
-.breadcrumb-wrap a,
-.breadcrumb-wrap a:before {
+.breadcrumb-wrap span,
+.breadcrumb-wrap span:before {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;

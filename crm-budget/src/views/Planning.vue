@@ -4,7 +4,9 @@
       <h3>Планирование</h3>
       <h4>{{ info.bill | currency('UAH') }}</h4>
     </div>
-    <div class="center" v-if="!categories.length">
+
+    <Loader v-if="loading" />
+    <div class="center" v-else-if="!categories.length">
       Категорий пока нет.
       <router-link to="/categories">Добавить новую категорию</router-link>
     </div>
@@ -33,6 +35,7 @@ export default {
   data() {
     return {
       categories: [],
+      loading: true,
     };
   },
   computed: {
@@ -62,6 +65,8 @@ export default {
         spend,
       };
     });
+
+    this.loading = false;
   },
 };
 </script>
