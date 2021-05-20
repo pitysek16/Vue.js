@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import messages from '@/utils/messages';
 import Navbar from '../components/app/Navbar';
 import Sidebar from '../components/app/Sidebar';
 export default {
@@ -44,6 +45,16 @@ export default {
   methods: {
     sidebarClick() {
       this.isOpenSidebar = !this.isOpenSidebar;
+    },
+  },
+  computed: {
+    error() {
+      return this.$store.getters.error;
+    },
+  },
+  watch: {
+    error(fbError) {
+      this.$error(messages[fbError.code]);
     },
   },
 };

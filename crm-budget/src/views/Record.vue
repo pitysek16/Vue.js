@@ -4,11 +4,17 @@
       <h3>Новая запись</h3>
     </div>
 
-    <form class="form">
-      <div class="input-field" >
-        <select>
-          <option
-          >name cat</option>
+    <div class="center" v-if="!categories.length">
+      Категорий пока нет.
+      <router-link to="/categories">Добавить новую категорию</router-link>
+    </div>
+
+    <form class="form" v-else @submit.prevent="submitAddPost">
+      <div class="input-field">
+        <select ref="select" v-model="category">
+          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+            {{ cat.title }}
+          </option>
         </select>
         <label>Выберите категорию</label>
       </div>
@@ -16,10 +22,11 @@
       <p>
         <label>
           <input
-              class="with-gap"
-              name="type"
-              type="radio"
-              value="income"
+            class="with-gap"
+            name="type"
+            type="radio"
+            value="income"
+            v-model="type"
           />
           <span>Доход</span>
         </label>
@@ -28,10 +35,11 @@
       <p>
         <label>
           <input
-              class="with-gap"
-              name="type"
-              type="radio"
-              value="outcome"
+            class="with-gap"
+            name="type"
+            type="radio"
+            value="outcome"
+            v-model="type"
           />
           <span>Расход</span>
         </label>
@@ -39,21 +47,38 @@
 
       <div class="input-field">
         <input
-            id="amount"
-            type="number"
-        >
+          id="amount"
+          type="number"
+          v-model.number="amount"
+          :class="{
+            invalid:
+              ($v.amount.$dirty && !$v.amount.required) ||
+              ($v.amount.$dirty && !$v.amount.minValue),
+          }"
+        />
         <label for="amount">Сумма</label>
-        <span class="helper-text invalid">amount пароль</span>
+        <span
+          class="helper-text invalid"
+          v-if="$v.amount.$dirty && !$v.amount.minValue"
+          >Введите минимальное значение</span
+        >
       </div>
 
       <div class="input-field">
         <input
-            id="description"
-            type="text"
-        >
+          id="description"
+          type="text"
+          v-model="description"
+          :class="{
+            invalid: $v.description.$dirty && !$v.description.required,
+          }"
+        />
         <label for="description">Описание</label>
         <span
-              class="helper-text invalid">description пароль</span>
+          class="helper-text invalid"
+          v-if="$v.description.$dirty && !$v.description.required"
+          >Введите описание</span
+        >
       </div>
 
       <button class="btn waves-effect waves-light" type="submit">
@@ -63,3 +88,89 @@
     </form>
   </div>
 </template>
+
+<script>
+import { required, minValue } from 'vuelidate/lib/validators';
+import M from 'materialize-css';
+import { mapGetters } from 'vuex';
+
+export default {
+  name: 'Record',
+  data() {
+    return {
+      categories: [],
+      category: null,
+      select: null,
+      type: 'outcome',
+      amount: 1,
+      description: '',
+    };
+  },
+  validations: {
+    description: { required },
+    amount: { required, minValue: minValue(1) },
+  },
+  async mounted() {
+    this.categories = await this.$store.dispatch('fetchCategories');
+    if (this.categories.length) {
+      this.category = this.categories[0].id;
+    }
+
+    setTimeout(() => {
+      this.select = M.FormSelect.init(this.$refs.select);
+      M.updateTextFields();
+    }, 0);
+  },
+  computed: {
+    ...mapGetters(['info']),
+    canCreatePost() {
+      if (this.type === 'income') {
+        return true;
+      }
+
+      return this.info.bill >= this.amount;
+    },
+  },
+  methods: {
+    async submitAddPost() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
+      const newPost = {
+        description: this.description,
+        amount: this.amount,
+        categoryId: this.category,
+        type: this.type,
+        date: new Date().toJSON(),
+      };
+
+      if (this.canCreatePost) {
+        try {
+          await this.$store.dispatch('createPost', newPost);
+          const bill =
+            this.type === 'income'
+              ? this.info.bill + this.amount
+              : this.info.bill - this.amount;
+          await this.$store.dispatch('updateInfo', { bill });
+          this.$message('Запись успешно создана');
+          this.$v.$reset();
+          this.amount = 1;
+          this.description = '';
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        this.$message(
+          `Недостаточно средств на счете (${this.amount - this.info.bill})`
+        );
+      }
+    },
+  },
+  destroyed() {
+    if (this.select && this.select.destroy) {
+      this.select.destroy();
+    }
+  },
+};
+</script>
