@@ -31,6 +31,11 @@ import HistoryTable from '@/components/HistoryTable';
 import paginationMixin from '@/mixins/pagination.mixin';
 export default {
   name: 'History',
+  metaInfo() {
+    return {
+      title: 'История',
+    };
+  },
   components: {
     HistoryTable,
   },

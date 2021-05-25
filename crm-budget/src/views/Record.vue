@@ -96,6 +96,11 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'Record',
+  metaInfo() {
+    return {
+      title: 'Новая запись',
+    };
+  },
   data() {
     return {
       categories: [],

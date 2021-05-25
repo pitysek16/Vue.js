@@ -24,6 +24,11 @@ import CategoryCreate from '@/components/CategoryCreate';
 import CategoryEdit from '@/components/CategoryEdit';
 export default {
   name: 'Categories',
+  metaInfo() {
+    return {
+      title: 'Категории',
+    };
+  },
   components: {
     CategoryCreate,
     CategoryEdit,

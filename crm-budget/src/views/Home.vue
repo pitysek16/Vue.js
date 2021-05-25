@@ -21,6 +21,11 @@ import HomeBill from '@/components/HomeBill';
 
 export default {
   name: 'home',
+  metaInfo() {
+    return {
+      title: 'Главная',
+    };
+  },
   data() {
     return {
       loading: true,

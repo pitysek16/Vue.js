@@ -92,6 +92,11 @@ import { required, email, minLength } from 'vuelidate/lib/validators';
 
 export default {
   name: 'Register',
+    metaInfo() {
+    return {
+      title: 'Регистрация',
+    };
+  },
   data() {
     return {
       email: '',

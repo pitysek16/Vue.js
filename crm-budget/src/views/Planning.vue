@@ -32,6 +32,11 @@
 import { mapGetters } from 'vuex';
 export default {
   name: 'Plane',
+  metaInfo() {
+    return {
+      title: 'Планирование',
+    };
+  },
   data() {
     return {
       categories: [],

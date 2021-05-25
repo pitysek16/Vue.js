@@ -31,6 +31,11 @@
 <script>
 export default {
   name: 'Detail',
+  metaInfo() {
+    return {
+      title: 'Подробнее',
+    };
+  },
   data() {
     return {
       oneRecord: '',
