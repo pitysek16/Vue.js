@@ -4,6 +4,7 @@
     <div class="app-main-layout" v-else>
       <Navbar @sidebarClick="sidebarClick" />
       <Sidebar class="app-sidenav" :class="{ open: isOpenSidebar }" />
+
       <main class="app-content" :class="{ full: !isOpenSidebar }">
         <div class="app-page">
           <router-view />
