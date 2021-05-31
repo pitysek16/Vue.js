@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: 'HomeBill',
   props: ['rates'],
@@ -22,10 +23,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['info']),
     baseBill() {
-      return (
-        this.$store.getters.info.bill / (this.rates['UAH'] / this.rates['EUR'])
-      );
+      return this.info.bill / (this.rates['UAH'] / this.rates['EUR']);
     },
   },
   methods: {

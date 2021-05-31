@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Plane',
   metaInfo() {
@@ -47,8 +47,8 @@ export default {
     ...mapGetters(['info']),
   },
   async mounted() {
-    const records = await this.$store.dispatch('fetchRecords');
-    const categor = await this.$store.dispatch('fetchCategories');
+    const records = await this.fetchRecords();
+    const categor = await this.fetchCategories();
 
     this.categories = categor.map((cat) => {
       const spend = records
@@ -72,6 +72,9 @@ export default {
     });
 
     this.loading = false;
+  },
+  methods: {
+    ...mapActions(['fetchRecords', 'fetchCategories']),
   },
 };
 </script>

@@ -29,6 +29,7 @@
 <script>
 import HistoryTable from '@/components/HistoryTable';
 import paginationMixin from '@/mixins/pagination.mixin';
+import { mapActions } from 'vuex';
 export default {
   name: 'History',
   metaInfo() {
@@ -47,8 +48,8 @@ export default {
     };
   },
   async mounted() {
-    this.records = await this.$store.dispatch('fetchRecords');
-    const categories = await this.$store.dispatch('fetchCategories');
+    this.records = await this.fetchRecords();
+    const categories = await this.fetchCategories();
     this.setupPagination(
       this.records.map((record) => {
         return {
@@ -61,6 +62,9 @@ export default {
       })
     );
     this.loading = false;
+  },
+  methods: {
+    ...mapActions(['fetchRecords', 'fetchCategories']),
   },
 };
 </script>

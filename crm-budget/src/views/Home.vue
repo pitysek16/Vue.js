@@ -18,6 +18,7 @@
 <script>
 import HomeCurrency from '@/components/HomeCurrency';
 import HomeBill from '@/components/HomeBill';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'home',
@@ -33,7 +34,7 @@ export default {
     };
   },
   async mounted() {
-    this.currency = await this.$store.dispatch('fetchCurrency');
+    this.currency = await this.fetchCurrency();
     this.loading = false;
   },
   components: {
@@ -43,9 +44,10 @@ export default {
   methods: {
     async refresh() {
       this.loading = true;
-      this.currency = await this.$store.dispatch('fetchCurrency');
+      this.currency = await this.fetchCurrency();
       this.loading = false;
     },
+    ...mapActions(['fetchCurrency']),
   },
 };
 </script>

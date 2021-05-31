@@ -41,6 +41,8 @@
 
 <script>
 import M from 'materialize-css';
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   data: () => ({
     date: new Date(),
@@ -48,13 +50,16 @@ export default {
     dropdown: null,
   }),
   computed: {
+    ...mapGetters(['info']),
     userName() {
-      return this.$store.getters.info.name;
+      return this.info.name;
     },
   },
   methods: {
+    ...mapActions(['logout']),
+
     async logout() {
-      await this.$store.dispatch('logout');
+      await this.logout();
       this.$router.push('/login?message=logout');
     },
   },

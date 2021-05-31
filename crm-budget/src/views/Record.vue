@@ -92,7 +92,7 @@
 <script>
 import { required, minValue } from 'vuelidate/lib/validators';
 import M from 'materialize-css';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Record',
@@ -117,7 +117,7 @@ export default {
     amount: { required, minValue: minValue(1) },
   },
   async mounted() {
-    this.categories = await this.$store.dispatch('fetchCategories');
+    this.categories = await this.fetchCategories();
     if (this.categories.length) {
       this.category = this.categories[0].id;
     }
@@ -140,6 +140,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['fetchCategories', 'createPost']),
     async submitAddPost() {
       if (this.$v.$invalid) {
         this.$v.$touch();
@@ -155,7 +156,7 @@ export default {
 
       if (this.canCreatePost) {
         try {
-          await this.$store.dispatch('createPost', newPost);
+          await this.createPost(newPost);
           const bill =
             this.type === 'income'
               ? this.info.bill + this.amount

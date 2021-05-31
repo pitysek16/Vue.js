@@ -64,6 +64,8 @@
 <script>
 import M from 'materialize-css';
 import { required, minValue } from 'vuelidate/lib/validators';
+import { mapActions } from 'vuex';
+
 export default {
   name: 'CategoryEdit',
   props: {
@@ -89,6 +91,7 @@ export default {
     M.updateTextFields();
   },
   methods: {
+    ...mapActions(['updateCategory']),
     async submitFixCategories() {
       if (this.$v.$invalid) {
         this.$v.$touch();
@@ -101,7 +104,7 @@ export default {
           limit: this.limit,
           id: this.current,
         };
-        await this.$store.dispatch('updateCategory', categoryData);
+        await this.updateCategory(categoryData);
         this.$message('Категория обновлена');
         this.$emit('updated', categoryData);
       } catch (error) {

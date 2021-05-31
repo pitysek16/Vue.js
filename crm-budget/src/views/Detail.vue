@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'Detail',
   metaInfo() {
@@ -44,11 +45,8 @@ export default {
   },
   async mounted() {
     const id = this.$route.params.id;
-    const record = await this.$store.dispatch('fetchRecordById', id);
-    const category = await this.$store.dispatch(
-      'fetchCategoryById',
-      record.categoryId
-    );
+    const record = await this.fetchRecordById(id);
+    const category = await this.fetchCategoryById(record.categoryId);
 
     this.oneRecord = {
       ...record,
@@ -58,6 +56,9 @@ export default {
     };
 
     this.loading = false;
+  },
+  methods: {
+    ...mapActions(['fetchRecordById', 'fetchCategoryById']),
   },
 };
 </script>

@@ -22,6 +22,7 @@
 <script>
 import CategoryCreate from '@/components/CategoryCreate';
 import CategoryEdit from '@/components/CategoryEdit';
+import { mapActions } from 'vuex';
 export default {
   name: 'Categories',
   metaInfo() {
@@ -41,10 +42,11 @@ export default {
     };
   },
   async mounted() {
-    this.categories = await this.$store.dispatch('fetchCategories');
+    this.categories = await this.fetchCategories();
     this.loading = false;
   },
   methods: {
+    ...mapActions(['fetchCategories']),
     addCategory(newCategory) {
       this.categories.push(newCategory);
     },

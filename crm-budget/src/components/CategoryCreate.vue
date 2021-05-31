@@ -55,6 +55,8 @@
 <script>
 import M from 'materialize-css';
 import { required, minValue } from 'vuelidate/lib/validators';
+import { mapActions } from 'vuex';
+
 export default {
   name: 'CategoryCreate',
   data() {
@@ -71,6 +73,8 @@ export default {
     M.updateTextFields();
   },
   methods: {
+    ...mapActions(['createCategory']),
+
     async submitAddCategory() {
       if (this.$v.$invalid) {
         this.$v.$touch();
@@ -82,10 +86,7 @@ export default {
       };
 
       try {
-        const category = await this.$store.dispatch(
-          'createCategory',
-          newCategory
-        );
+        const category = await this.createCategory(newCategory);
         this.title = '';
         this.limit = 1;
         this.$v.$reset();
