@@ -5,12 +5,15 @@
     <SearchText v-if="!state.search" />
     <NoMovies v-if="state.movies === undefined && state.search" />
 
-    <div v-if="!state.loading" class="grid grid-cols-4 gap-4 m-auto w-5/6">
+    <div
+      v-if="!state.loading"
+      class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 m-auto w-5/6"
+    >
       <Movie
         v-for="movie in state.movies"
         :movie="movie"
         :key="movie.imdbID"
-        class="my-3"
+        class="m-auto"
       />
     </div>
     <Loader v-else />
